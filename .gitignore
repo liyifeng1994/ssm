@@ -1,21 +1,16 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+@@ -0,0 +1,59 @@
+*.class
 
-# Folder config file
-Desktop.ini
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# Package Files #
+#*.jar
+*.war
+*.ear
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
 
 # =========================
 # Operating System Files
@@ -41,3 +36,25 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Windows
+# =========================
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
