@@ -5,7 +5,7 @@
 	<!-- 如果是用mvn命令生成的xml，需要修改servlet版本为3.1 -->
 	<!-- 配置DispatcherServlet -->
 	<servlet>
-		<servlet-name>seckill-dispatcher</servlet-name>
+		<servlet-name>mvc-dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<!-- 配置springMVC需要加载的配置文件
 			spring-dao.xml,spring-service.xml,spring-web.xml
@@ -17,7 +17,7 @@
 		</init-param>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>seckill-dispatcher</servlet-name>
+		<servlet-name>mvc-dispatcher</servlet-name>
 		<!-- 默认匹配所有的请求 -->
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
