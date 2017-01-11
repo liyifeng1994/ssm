@@ -1,3 +1,4 @@
+这不是慕课网上的视频整理出来的嘛
 # SSM
 手把手教你整合最优雅SSM框架：SpringMVC + Spring + MyBatis
 
