@@ -68,9 +68,9 @@
 
 -----------
 
-还有最后一步基础工作，导入我们相应的jar包，我使用的是maven来管理我们的jar，所以只需要在`poom.xml`中加入相应的依赖就好了，如果不使用maven的可以自己去官网下载相应的jar，放到项目WEB-INF/lib目录下。关于maven的学习大家可以看[慕课网的视频教程](http://www.imooc.com/learn/443)，这里就不展开了。我把项目用到的jar都写在下面，版本都不是最新的，大家有经验的话可以自己调整版本号。另外，所有jar都会与项目一起打包放到我的[github](https://github.com/liyifeng1994/ssm)上，喜欢的给个star吧~
+还有最后一步基础工作，导入我们相应的jar包，我使用的是maven来管理我们的jar，所以只需要在`pom.xml`中加入相应的依赖就好了，如果不使用maven的可以自己去官网下载相应的jar，放到项目WEB-INF/lib目录下。关于maven的学习大家可以看[慕课网的视频教程](http://www.imooc.com/learn/443)，这里就不展开了。我把项目用到的jar都写在下面，版本都不是最新的，大家有经验的话可以自己调整版本号。另外，所有jar都会与项目一起打包放到我的[github](https://github.com/liyifeng1994/ssm)上，喜欢的给个star吧~
 
-**poom.xml**
+**pom.xml**
 ``` xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
