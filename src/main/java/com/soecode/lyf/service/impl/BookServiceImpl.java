@@ -14,6 +14,9 @@ import com.soecode.lyf.dto.AppointExecution;
 import com.soecode.lyf.entity.Appointment;
 import com.soecode.lyf.entity.Book;
 import com.soecode.lyf.enums.AppointStateEnum;
+import com.soecode.lyf.exception.AppointException;
+import com.soecode.lyf.exception.NoNumberException;
+import com.soecode.lyf.exception.RepeatAppointException;
 import com.soecode.lyf.service.BookService;
 
 @Service
@@ -51,21 +54,25 @@ public class BookServiceImpl implements BookService {
 			// 减库存
 			int update = bookDao.reduceNumber(bookId);
 			if (update <= 0) {// 库存不足
-				return new AppointExecution(bookId, AppointStateEnum.NO_NUMBER);
+				throw new NoNumberException("no number");
 			} else {
 				// 执行预约操作
 				int insert = appointmentDao.insertAppointment(bookId, studentId);
 				if (insert <= 0) {// 重复预约
-					return new AppointExecution(bookId, AppointStateEnum.REPEAT_APPOINT);
+					throw new RepeatAppointException("repeat appoint");
 				} else {// 预约成功
 					Appointment appointment = appointmentDao.queryByKeyWithBook(bookId, studentId);
 					return new AppointExecution(bookId, AppointStateEnum.SUCCESS, appointment);
 				}
 			}
+		} catch (NoNumberException e1) {
+			throw e1;
+		} catch (RepeatAppointException e2) {
+			throw e2;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			// 所有编译期异常转换为运行期异常
-			return new AppointExecution(bookId, AppointStateEnum.INNER_ERROR);
+			throw new AppointException("appoint inner error:" + e.getMessage());
 		}
 	}
 
