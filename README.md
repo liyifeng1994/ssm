@@ -833,7 +833,7 @@ public class AppointmentDaoTest extends BaseTest {
 
 嗯，到这里一切到很顺利~那么我们继续service层的编码吧~可能下面开始信息里比较大，大家要做好心理准备~
 
-首先，在写我们的业务之前，我们先定义几个预约图书操作返回码的数据字典，我们这类使用枚举类，没听过的小伙伴要好好恶补一下了（我也是最近才学到的= =）
+首先，在写我们的业务之前，我们先定义几个预约图书操作返回码的数据字典，也就是我们要返回给客户端的信息。我们这类使用枚举类，没听过的小伙伴要好好恶补一下了（我也是最近才学到的= =）
 
 **预约业务操作返回码说明**
 
@@ -939,6 +939,77 @@ public class AppointExecution {
 
 -------------
 
+接着，在`exception`包下新建三个文件
+`NoNumberException.java`
+`RepeatAppointException.java`
+`AppointException.java`
+预约业务异常类（都需要继承RuntimeException），分别是无库存异常、重复预约异常、预约未知错误异常，用于业务层非成功情况下的返回（即成功返回结果，失败抛出异常）。
+
+**NoNumberException.java**
+``` java
+package com.soecode.lyf.exception;
+
+/**
+ * 库存不足异常
+ */
+public class NoNumberException extends RuntimeException {
+
+	public NoNumberException(String message) {
+		super(message);
+	}
+
+	public NoNumberException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+}
+
+```
+
+**RepeatAppointException.java**
+``` java
+package com.soecode.lyf.exception;
+
+/**
+ * 重复预约异常
+ */
+public class RepeatAppointException extends RuntimeException {
+
+	public RepeatAppointException(String message) {
+		super(message);
+	}
+
+	public RepeatAppointException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+}
+
+```
+
+**AppointException.java**
+``` java
+package com.soecode.lyf.exception;
+
+/**
+ * 预约业务异常
+ */
+public class AppointException extends RuntimeException {
+
+	public AppointException(String message) {
+		super(message);
+	}
+
+	public AppointException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+}
+
+```
+
+-------------
+
 咱们终于可以编写业务代码了，在`service`包下新建`BookService.java`图书业务接口。
 
 **BookService.java**
@@ -1002,6 +1073,9 @@ import com.soecode.lyf.dto.AppointExecution;
 import com.soecode.lyf.entity.Appointment;
 import com.soecode.lyf.entity.Book;
 import com.soecode.lyf.enums.AppointStateEnum;
+import com.soecode.lyf.exception.AppointException;
+import com.soecode.lyf.exception.NoNumberException;
+import com.soecode.lyf.exception.RepeatAppointException;
 import com.soecode.lyf.service.BookService;
 
 @Service
@@ -1039,21 +1113,29 @@ public class BookServiceImpl implements BookService {
 			// 减库存
 			int update = bookDao.reduceNumber(bookId);
 			if (update <= 0) {// 库存不足
-				return new AppointExecution(bookId, AppointStateEnum.NO_NUMBER);
+				//return new AppointExecution(bookId, AppointStateEnum.NO_NUMBER);//错误写法				
+				throw new NoNumberException("no number");
 			} else {
 				// 执行预约操作
 				int insert = appointmentDao.insertAppointment(bookId, studentId);
 				if (insert <= 0) {// 重复预约
-					return new AppointExecution(bookId, AppointStateEnum.REPEAT_APPOINT);
+					//return new AppointExecution(bookId, AppointStateEnum.REPEAT_APPOINT);//错误写法
+					throw new RepeatAppointException("repeat appoint");
 				} else {// 预约成功
 					Appointment appointment = appointmentDao.queryByKeyWithBook(bookId, studentId);
 					return new AppointExecution(bookId, AppointStateEnum.SUCCESS, appointment);
 				}
 			}
+		// 要先于catch Exception异常前先catch住再抛出，不然自定义的异常也会被转换为AppointException，导致控制层无法具体识别是哪个异常
+		} catch (NoNumberException e1) {
+			throw e1;
+		} catch (RepeatAppointException e2) {
+			throw e2;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			// 所有编译期异常转换为运行期异常
-			return new AppointExecution(bookId, AppointStateEnum.INNER_ERROR);
+			//return new AppointExecution(bookId, AppointStateEnum.INNER_ERROR);//错误写法
+			throw new AppointException("appoint inner error:" + e.getMessage());
 		}
 	}
 
@@ -1165,6 +1247,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.soecode.lyf.dto.AppointExecution;
 import com.soecode.lyf.dto.Result;
 import com.soecode.lyf.entity.Book;
+import com.soecode.lyf.enums.AppointStateEnum;
+import com.soecode.lyf.exception.NoNumberException;
+import com.soecode.lyf.exception.RepeatAppointException;
 import com.soecode.lyf.service.BookService;
 
 @Controller
@@ -1205,7 +1290,17 @@ public class BookController {
 		if (studentId == null || studentId.equals("")) {
 			return new Result<>(false, "学号不能为空");
 		}
-		AppointExecution execution = bookService.appoint(bookId, studentId);
+		//AppointExecution execution = bookService.appoint(bookId, studentId);//错误写法，不能统一返回，要处理异常（失败）情况
+		AppointExecution execution = null;
+		try {
+			execution = bookService.appoint(bookId, studentId);
+		} catch (NoNumberException e1) {
+			execution = new AppointExecution(bookId, AppointStateEnum.NO_NUMBER);
+		} catch (RepeatAppointException e2) {
+			execution = new AppointExecution(bookId, AppointStateEnum.REPEAT_APPOINT);
+		} catch (Exception e) {
+			execution = new AppointExecution(bookId, AppointStateEnum.INNER_ERROR);
+		}
 		return new Result<AppointExecution>(true, execution);
 	}
 
@@ -1216,3 +1311,8 @@ public class BookController {
 因为我比较懒，所以我们就不测试controller了,好讨厌写前端，呜呜呜~
 
 到此，我们的SSM框架整合配置，与应用实例部分已经结束了，我把所有源码和jar包一起打包放在了我的GitHub上，需要的可以去下载，喜欢就给个star吧，这篇东西写了两个晚上也不容易啊。
+
+----------
+
+2017-02-28更新：
+修改预约业务代码，失败时抛异常，成功时才返回结果，控制层根据捕获的异常返回相应信息给客户端，而不是业务层直接返回错误结果。上面的代码已经作了修改，而且错误示范也注释保留着，之前误人子弟了，还好有位网友前几天提出质疑，我也及时做了修改。
