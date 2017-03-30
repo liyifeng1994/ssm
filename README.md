@@ -1269,9 +1269,7 @@ public class BookController {
 		return "list";// WEB-INF/jsp/"list".jsp
 	}
 
-	// ajax json
 	@RequestMapping(value = "/{bookId}/detail", method = RequestMethod.GET)
-	@ResponseBody
 	private String detail(@PathVariable("bookId") Long bookId, Model model) {
 		if (bookId == null) {
 			return "redirect:/book/list";
@@ -1284,9 +1282,11 @@ public class BookController {
 		return "detail";
 	}
 
+	//ajax json
 	@RequestMapping(value = "/{bookId}/appoint", method = RequestMethod.POST, produces = {
 			"application/json; charset=utf-8" })
-	private Result<AppointExecution> appoint(@PathVariable("bookId") Long bookId, @Param("studentId") Long studentId) {
+	@ResponseBody
+	private Result<AppointExecution> appoint(@PathVariable("bookId") Long bookId, @RequestParam("studentId") Long studentId) {
 		if (studentId == null || studentId.equals("")) {
 			return new Result<>(false, "学号不能为空");
 		}
@@ -1314,5 +1314,13 @@ public class BookController {
 
 ----------
 
-2017-02-28更新：
+2017-02-28更新（感谢网友EchoXml发现）：
 修改预约业务代码，失败时抛异常，成功时才返回结果，控制层根据捕获的异常返回相应信息给客户端，而不是业务层直接返回错误结果。上面的代码已经作了修改，而且错误示范也注释保留着，之前误人子弟了，还好有位网友前几天提出质疑，我也及时做了修改。
+
+2017-03-30更新（感谢网友ergeerge1建议）：
+修改BookController几处错误
+1.detail方法不是返回json的，故不用加@ResponseBody注解
+2.appoint方法应该加上@ResponseBody注解
+3.另外studentId参数注解应该是@RequestParam
+4.至于controller测试，测试appoint方法可不必写jsp，用curl就行，比如
+curl -H "Accept: application/json; charset=utf-8" -d "studentId=1234567890" localhost:8080/book/1003/appoint
