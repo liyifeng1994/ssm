@@ -1,18 +1,24 @@
 package com.soecode.lyf.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.soecode.lyf.dao.AppointmentDao;
+import com.soecode.lyf.dao.BookDao;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
+import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:jdbc.properties")
-@ImportResource("classpath:spring/spring-dao.xml")
-@ComponentScan("com.soecode.lyf.dao")
+@MapperScan("com.soecode.lyf.dao")
 public class DaoConfig {
 
     @Value("${jdbc.driver}")
@@ -40,6 +46,33 @@ public class DaoConfig {
         dataSource.setCheckoutTimeout(10000);
         dataSource.setAcquireRetryAttempts(2);
         return dataSource;
+    }
+
+    @Bean
+    public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource) {
+        Properties properties = new Properties();
+        properties.put("useGeneratedKeys", true);
+        properties.put("useColumnLabel", true);
+        properties.put("mapUnderscoreToCamelCase", true);
+        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        bean.setTypeAliasesPackage("com.soecode.lyf.entity");
+        bean.setConfigurationProperties(properties);
+        bean.setDataSource(dataSource);
+        return bean;
+    }
+
+    @Bean
+    public MapperFactoryBean<BookDao> bookDaoMapper(SqlSessionFactory factory) {
+        MapperFactoryBean<BookDao> bean = new MapperFactoryBean<>(BookDao.class);
+        bean.setSqlSessionFactory(factory);
+        return bean;
+    }
+
+    @Bean
+    public MapperFactoryBean<AppointmentDao> appointmentDaoMapperFactoryBean(SqlSessionFactory factory) {
+        MapperFactoryBean<AppointmentDao> bean = new MapperFactoryBean<>(AppointmentDao.class);
+        bean.setSqlSessionFactory(factory);
+        return bean;
     }
 
 }
