@@ -6,28 +6,6 @@
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd">
 	<!-- 配置整合mybatis过程 -->
-	<!-- 1.配置数据库相关参数properties的属性：${url} -->
-	<context:property-placeholder location="classpath:jdbc.properties" />
-
-	<!-- 2.数据库连接池 -->
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-		<!-- 配置连接池属性 -->
-		<property name="driverClass" value="${jdbc.driver}" />
-		<property name="jdbcUrl" value="${jdbc.url}" />
-		<property name="user" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
-
-		<!-- c3p0连接池的私有属性 -->
-		<property name="maxPoolSize" value="30" />
-		<property name="minPoolSize" value="10" />
-		<!-- 关闭连接后不自动commit -->
-		<property name="autoCommitOnClose" value="false" />
-		<!-- 获取连接超时时间 -->
-		<property name="checkoutTimeout" value="10000" />
-		<!-- 当获取连接失败重试次数 -->
-		<property name="acquireRetryAttempts" value="2" />
-	</bean>
-
 	<!-- 3.配置SqlSessionFactory对象 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 注入数据库连接池 -->
