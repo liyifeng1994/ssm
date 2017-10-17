@@ -28,6 +28,11 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-spring</artifactId>
+			<version>0.1.4</version>
+		</dependency>
 
 		<!-- 2.数据库 -->
 		<dependency>

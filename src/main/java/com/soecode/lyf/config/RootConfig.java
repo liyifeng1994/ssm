@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
-@Import({DaoConfig.class, ServiceConfig.class, WebConfig.class})
+@Import({DaoConfig.class, ServiceConfig.class, WebConfig.class, LogbackConfig.class})
 public class RootConfig {
 
     @Bean
