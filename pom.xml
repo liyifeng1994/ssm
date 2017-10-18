@@ -7,6 +7,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ssm Maven Webapp</name>
 	<url>http://github.com/liyifeng1994/ssm</url>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<version.spring>4.1.7.RELEASE</version.spring>
+	</properties>
 	<dependencies>
 		<!-- 单元测试 -->
 		<dependency>
@@ -21,6 +27,21 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-spring</artifactId>
+			<version>0.1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.7.25</version>
 		</dependency>
 
 		<!-- 2.数据库 -->
@@ -75,45 +96,51 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${version.spring}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${version.spring}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${version.spring}</version>
 		</dependency>
 		<!-- 2)Spring DAO层 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${version.spring}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${version.spring}</version>
 		</dependency>
 		<!-- 3)Spring web -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${version.spring}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${version.spring}</version>
 		</dependency>
 		<!-- 4)Spring test -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${version.spring}</version>
 		</dependency>
 
 		<!-- redis客户端:Jedis -->
@@ -142,5 +169,28 @@
 	</dependencies>
 	<build>
 		<finalName>ssm</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.4.6.v20170531</version>
+				<configuration>
+					<webApp>
+						<contextPath>/</contextPath>
+					</webApp>
+					<httpConnector>
+						<port>8010</port>
+					</httpConnector>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
