@@ -25,7 +25,7 @@
 
 好了，前面bb那么多，下面我们真正开始敲代码了~
 
-首先我们打开IED，我这里用的是eclipse（你们应该也是用的这个，对吗？），创建一个动态web项目，建立好相应的**目录结构**（重点！）
+首先我们打IDE，我这里用的是eclipse（你们应该也是用的这个，对吗？），创建一个动态web项目，建立好相应的**目录结构**（重点！）
 
 ![项目结构图](http://img.blog.csdn.net/20160618002041099)
 
@@ -646,7 +646,7 @@ public interface AppointmentDao {
 		FROM
 			book
 		WHERE
-			book_id = #{bookId}
+			book_id = #{id}
 	</select>
 	
 	<select id="queryAll" resultType="Book">
