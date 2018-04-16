@@ -64,11 +64,13 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.5.4</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
+		-->
 
 		<!-- 4.Spring -->
 		<!-- 1)Spring核心 -->
@@ -142,5 +144,17 @@
 	</dependencies>
 	<build>
 		<finalName>ssm</finalName>
-	</build>
+		<plugins>
+		<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>3.1</version>
+		<configuration>
+		<source>1.7</source> 
+		<target>1.7</target>
+		</configuration>
+		</plugin>
+		</plugins>
+     </build>
+	
 </project>

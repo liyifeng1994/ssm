@@ -10,8 +10,44 @@ public class Book {
 	private String name;// 图书名称
 
 	private int number;// 馆藏数量
+	
+	private String description;// 图书简介
+	
+	private String press;// 出版社
+	
+	
 
-	public Book() {
+	/**  
+     * @return the description  
+     */
+    
+    public String getDescription() {
+        return description;
+    }
+
+    /**  
+     * @param description the description to set  
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**  
+     * @return the press  
+     */
+    
+    public String getPress() {
+        return press;
+    }
+
+    /**  
+     * @param press the press to set  
+     */
+    public void setPress(String press) {
+        this.press = press;
+    }
+
+    public Book() {
 	}
 
 	public Book(long bookId, String name, int number) {
