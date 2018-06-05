@@ -1324,3 +1324,5 @@ public class BookController {
 3.另外studentId参数注解应该是@RequestParam
 4.至于controller测试，测试appoint方法可不必写jsp，用curl就行，比如
 curl -H "Accept: application/json; charset=utf-8" -d "studentId=1234567890" localhost:8080/book/1003/appoint
+
+![](https://img-ask.csdn.net/upload/201806/05/1528204838_152827.png)
