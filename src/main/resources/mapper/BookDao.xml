@@ -4,12 +4,11 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.soecode.lyf.dao.BookDao">
 	<!-- 目的：为dao接口方法提供sql语句配置 -->
+    <sql id="bookCol">book_id,name,number,description,press</sql>
 	<select id="queryById" resultType="Book" parameterType="long">
 		<!-- 具体的sql -->
 		SELECT
-			book_id,
-			name,
-			number
+			<include refid="bookCol"></include> 
 		FROM
 			book
 		WHERE
