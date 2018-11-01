@@ -32,7 +32,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 注入数据库连接池 -->
 		<property name="dataSource" ref="dataSource" />
-		<!-- 配置MyBaties全局配置文件:mybatis-config.xml -->
+		<!-- 配置MyBatis全局配置文件:mybatis-config.xml -->
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
 		<!-- 扫描entity包 使用别名 -->
 		<property name="typeAliasesPackage" value="com.soecode.lyf.entity" />
