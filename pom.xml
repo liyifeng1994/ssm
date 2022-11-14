@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>4.2.7.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
