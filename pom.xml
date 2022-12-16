@@ -107,7 +107,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>5.2.20.RELEASE</version>
 		</dependency>
 		<!-- 4)Spring test -->
 		<dependency>
